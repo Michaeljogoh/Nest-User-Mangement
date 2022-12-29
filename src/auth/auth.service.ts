@@ -3,35 +3,61 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { NewUserDTO } from 'src/user/dto/new-user.dto';
 import { UserDetails } from 'src/user/interface/user-detail.interface';
-
+import { ExistingUserDTO } from 'src/user/dto/existing-user.dto';
+import { JwtService } from '@nestjs/jwt/dist';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService , private jwtService : JwtService) {}
 
-//   Hashed Password 
+  //   Hashed Password
   async hashedPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, 12);
+    return  await bcrypt.hash(password, 12);
   }
 
-//   Register
-
-async register(user: Readonly <NewUserDTO>) : Promise <UserDetails | null | string>{
-
-    const {name , email , password} = user;
+  //   Register
+  async register(user: Readonly<NewUserDTO>): Promise<UserDetails | any> {
+    const { name, email, password } = user;
 
     const existingUser = await this.userService.findByEmail(email);
 
-    if(existingUser ) return 'Email already exist!!!';
+    if (existingUser) return 'Email already exist!!!';
 
     const hashedPassword = await this.hashedPassword(password);
 
-    const newUser = await this.userService.create(name , email , hashedPassword);
+    const newUser = await this.userService.create(name, email, hashedPassword);
 
-    return newUser;
+    return this.userService._getUserDetails(newUser)
+  }
+
+  // Does password match
+  async doesPasswordMatch(password : string , hashedPassword: string): Promise<boolean>{
+    return await bcrypt.compare(password , hashedPassword);
+  }
+
+  // Validate user
+
+  async validateUser(email : string , password: string) : Promise<UserDetails | null>{
+    const user = await this.userService.findByEmail(email)
+    if(!user) return null;
+
+    const doesPasswordMatch = await this.doesPasswordMatch(password , user.password);
+
+    if(!doesPasswordMatch) return null;
+
+    return this.userService._getUserDetails(user)
+  }
 
 
+  async login( existingUser : ExistingUserDTO): Promise<{token : string} | null>{
+    const {email , password} = existingUser;
 
-}
+    const user = await this.validateUser(email , password);
 
+    if(!user) return null;
+    
+    const jwt = await this.jwtService.signAsync({ user });
+
+    return {token : jwt}
+  }
 }

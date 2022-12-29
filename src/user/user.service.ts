@@ -7,8 +7,7 @@ import { UserDetails } from '../user/interface/user-detail.interface';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel('User') private readonly userModel: Model<UserDocument>,
-  ) {}
+    @InjectModel('User') private readonly userModel: Model<UserDocument>) {}
 
   _getUserDetails(user: UserDocument): UserDetails {
     return {
@@ -18,21 +17,20 @@ export class UserService {
     };
   }
 
-  // Find Email
+  // Find user email
   async findByEmail(email : string) : Promise<UserDocument | null>{
   return  await this.userModel.findOne({email}).exec()
   }
 
   async findById(id: string) : Promise<UserDetails | null> {
-    const user = await this.userModel.findOne({_id : id});
+    const user = await this.userModel.findById(id);
     if(!user) return null;
     return this._getUserDetails(user)
  
     }
 
 
-
-//   Create User 
+//   Create user account
 
   async create(
     name: string,
@@ -45,5 +43,12 @@ export class UserService {
       password: hashedPassword,
     });
     return newUser.save();
+  }
+
+
+  // Delete user account
+  async delete (id: string) : Promise<UserDetails>{
+    return await this.userModel.findByIdAndDelete(id)
+
   }
 }
