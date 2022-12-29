@@ -1,5 +1,11 @@
+import { IsEmpty, IsNotEmpty } from '@nestjs/class-validator';
+
 export class NewUserDTO {
-    name : string;
-    email: string;
-    password: string;
+  @IsNotEmpty()
+  name: string;
+  @IsEmpty()
+  @IsNotEmpty()
+  email: string;
+  @IsNotEmpty()
+  password: string;
 }
