@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { NewUserDTO } from 'src/user/dto/new-user.dto';
@@ -39,11 +39,11 @@ export class AuthService {
 
   async validateUser(email : string , password: string) : Promise<UserDetails | null>{
     const user = await this.userService.findByEmail(email)
-    if(!user) return null;
+    if(!user) throw new HttpException('Email Already Exist!!!', HttpStatus.BAD_REQUEST);
 
     const doesPasswordMatch = await this.doesPasswordMatch(password , user.password);
 
-    if(!doesPasswordMatch) return null;
+    if(!doesPasswordMatch)throw new HttpException('Password does not match', HttpStatus.BAD_REQUEST);
 
     return this.userService._getUserDetails(user)
   }

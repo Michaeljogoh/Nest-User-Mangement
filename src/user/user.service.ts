@@ -31,12 +31,7 @@ export class UserService {
 
 
 //   Create user account
-
-  async create(
-    name: string,
-    email: string,
-    hashedPassword: string,
-  ): Promise<UserDocument> {
+  async create(name: string, email: string, hashedPassword: string ): Promise<UserDocument> {
     const newUser = new this.userModel({
       name,
       email,
@@ -44,11 +39,17 @@ export class UserService {
     });
     return newUser.save();
   }
+  // Update user profile
+  async update(id: string ,  user: UserDocument) : Promise<UserDetails>{
+    return await this.userModel.findByIdAndUpdate(id , user, {new: true})
+  }
 
 
   // Delete user account
-  async delete (id: string) : Promise<UserDetails>{
+  async delete (id: string ) : Promise<UserDetails>{
     return await this.userModel.findByIdAndDelete(id)
 
   }
+
+  
 }

@@ -1,7 +1,8 @@
 
 export default {
     MongoURI : 'mongodb://localhost:27017/user' ,
-    secret: 'secret',
-    expiresIn : '3600s'
+    secret: process.env.SECRET,
+    expiresIn : process.env.EXPIREIN,
+    port: process.env.PORT
 
 }
