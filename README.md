@@ -1,3 +1,4 @@
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
@@ -25,6 +26,22 @@
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+
+
+
+# NestJs  User Mangement
+
+User mangement is an authentication application which users create an account and login , u upload profile picture , edit profile  and delete account.
+
+
+## Technologies Used
+
+- Typescript
+- Server NestJS 
+- Database AWS S3
+- MongoDB
+- JWT Token
+- Passport-jwt
 
 ## Installation
 
