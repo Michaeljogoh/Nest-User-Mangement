@@ -10,11 +10,11 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   // Update user Account
+  @UseGuards(JwtGuard)
   @Put(':id')
   update(@Param('id') id: string, user: UserDocument): Promise<UserDetails> {
     return this.userService.update(id, user);
   }
-
   // Delete User Account
   @UseGuards(JwtGuard)
   @Delete(':id')

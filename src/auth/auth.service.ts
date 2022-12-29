@@ -21,7 +21,8 @@ export class AuthService {
 
     const existingUser = await this.userService.findByEmail(email);
 
-    if (existingUser) return 'Email already exist!!!';
+    if (existingUser) throw new HttpException('Email already exist!!!', HttpStatus.BAD_REQUEST)
+   
 
     const hashedPassword = await this.hashedPassword(password);
 

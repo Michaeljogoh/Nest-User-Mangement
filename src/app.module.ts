@@ -9,7 +9,10 @@ import { PictureModule } from './picture/picture.module';
 
 
 @Module({
-  imports: [PictureModule ,ConfigModule.forRoot(), UserModule, AuthModule, MongooseModule.forRoot(config.MongoURI)],
+  imports: [ ConfigModule.forRoot({ isGlobal : true }),PictureModule, UserModule, AuthModule, MongooseModule.forRoot(process.env.MONGOURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })],
 
 })
 export class AppModule {}

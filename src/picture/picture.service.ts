@@ -4,10 +4,6 @@ import * as AWS from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
 
 
-const AWS_S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME
-
-
-
 const s3 = new AWS.S3();
 
 AWS.config.update({
@@ -33,9 +29,9 @@ export class PictureService {
         }
       }
       upload = multer({
-        storage :multerS3({
+        storage : multerS3({
         s3: s3,
-        bucket: 'imageupload2344',
+        bucket:  process.env.AWS_S3_BUCKET_NAME,
         acl:'public-read',
         key: function(request, file , cb){
             cb(null , `${Date.now().toString()} - ${file.originalname}`)
