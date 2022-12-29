@@ -31,7 +31,7 @@
 
 # NestJs  User Mangement
 
-User mangement is an authentication application which users create an account and login , u upload profile picture , edit profile  and delete account.
+User mangement is an authentication application which users create an account and login , upload profile picture , edit profile  and delete account.
 
 
 ## Technologies Used
